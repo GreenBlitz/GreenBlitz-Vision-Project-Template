@@ -1,17 +1,16 @@
-from logging import Logger
-
 import gbvision as gbv
 import gbrpi
 
 from algorithms import BaseAlgorithm
 from constants import CAMERA_PORT
 from constants import TABLE_IP, TABLE_NAME, OUTPUT_KEY, SUCCESS_KEY
+from utils.gblogger import GBLogger
 
 LOGGER_NAME = 'vision_master'
 
 
 def main():
-    logger = Logger(LOGGER_NAME)
+    logger = GBLogger(LOGGER_NAME)
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
     logger.debug('initialized conn')
     camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed
