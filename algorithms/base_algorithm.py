@@ -5,13 +5,26 @@ from typing import Union, List, Iterable, Dict, Type
 import gbvision as gbv
 import gbrpi
 
-from exceptions.algorithm_incomplete import AlgorithmIncomplete
-
 
 class BaseAlgorithm(abc.ABC):
     __registered = {}
     algorithm_name = None
+    """
+    this is the name of the algorithm, for every algorithm this must be a unique value different from 0
+    the network table will tell you which algorithm they currently want to run by using this program
+    """
     DEBUG = False
+    """
+    indicates if the program is being run in debug mode
+    not in use by the base program, but should be used by algorithms in order to print extra data in debug mode
+    """
+
+    class AlgorithmIncomplete(BaseException):
+        """
+        raise this exception when an algorithm cannot complete it's operation successfully and return the wanted result
+        for example when a ball-detection algorithm did not find any circles in the frame, so it cannot calculate the
+        distance from the closest one
+        """
 
     def __init_subclass__(cls, **kwargs):
         if cls.algorithm_name is None:
@@ -38,26 +51,31 @@ class BaseAlgorithm(abc.ABC):
                 for i, value in enumerate(values):
                     self.conn.set(self.output_key[i], value)
             self.conn.set(self.success_key, True)
-        except AlgorithmIncomplete:
+        except self.AlgorithmIncomplete:
             self.conn.set(self.success_key, False)
             if self.log_algorithm_incomplete:
                 traceback.print_exc()
 
     @abc.abstractmethod
     def _process(self, frame: gbv.Frame, camera: gbv.Camera) -> Union[
-        gbrpi.ConnEntryValue, Iterable[gbrpi.ConnEntryValue]]:
+            gbrpi.ConnEntryValue, Iterable[gbrpi.ConnEntryValue]]:
         """
+        processes the frame and returns the result to be placed
 
-        :param frame:
-        :param camera:
-        :return:
+        :raises BaseAlgorithm.AlgorithmIncomplete: in case the method cannot return the result
+        :param frame: the frame to process
+        :param camera: the camera used to capture the frame
+        :return: a value, or tuple of values, to put in the network table. a tuple will be provided if the algorithm
+            places more than one value in the network table
         """
 
     @abc.abstractmethod
-    def reset(self, camera: gbv.Camera):
+    def reset(self, arg):
         """
+        a method that is run every time the current algorithm is switched to this one
 
-        :return:
+        :param arg: can be anything needed to reboot this algorithm, usually the camera (for setting exposure), and
+            sometimes a tuple of a camera and a led-ring if needed to turn on/off
         """
 
     @classmethod

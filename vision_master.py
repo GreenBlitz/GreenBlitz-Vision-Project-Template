@@ -2,14 +2,11 @@ from logging import Logger
 
 import gbvision as gbv
 import gbrpi
-import numpy as np
 
 from algorithms import BaseAlgorithm
+from constants import CAMERA_PORT
+from constants import TABLE_IP, TABLE_NAME, OUTPUT_KEY, SUCCESS_KEY
 
-TABLE_NAME = 'vision'
-TABLE_IP = '10.45.90.2'
-OUTPUT_KEY = 'output'
-SUCCESS_KEY = 'found'
 LOGGER_NAME = 'vision_master'
 
 
@@ -17,7 +14,7 @@ def main():
     logger = Logger(LOGGER_NAME)
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
     logger.debug('initialized conn')
-    camera = gbv.USBCamera(1, gbv.LIFECAM_3000)
+    camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed
     logger.debug('initialized camera')
 
     all_algos = BaseAlgorithm.get_algorithms()
