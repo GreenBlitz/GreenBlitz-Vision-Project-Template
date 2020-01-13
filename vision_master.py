@@ -11,6 +11,7 @@ LOGGER_NAME = 'vision_master'
 
 def main():
     logger = GBLogger(LOGGER_NAME)
+    logger.allow_debug = BaseAlgorithm.DEBUG
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
     logger.debug('initialized conn')
     camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed

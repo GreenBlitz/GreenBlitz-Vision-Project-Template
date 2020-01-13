@@ -10,7 +10,7 @@ class GBLogger:
         if use_file:
             self.file = open(os.path.join(file_path, name + '.log'), 'w')
         self.allow_debug = False
-        self.allow_info = False
+        self.allow_info = True
         self.allow_warning = True
         self.allow_fatal = True
     
