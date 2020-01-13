@@ -10,7 +10,7 @@ LOGGER_NAME = 'vision_master'
 
 
 def main():
-    logger = GBLogger(LOGGER_NAME)
+    logger = GBLogger(LOGGER_NAME, use_file=True)
     logger.allow_debug = BaseAlgorithm.DEBUG
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
     logger.info('initialized conn')
