@@ -3,11 +3,12 @@ import os
 
 class GBLogger:
     def __init__(self, name, use_file=False, file_path=None):
-        if file_path is None:
-            file_path = os.path.join(os.getcwd(), 'logs')
         self.name = name
         self.use_file = use_file
         if use_file:
+            if file_path is None:
+                file_path = os.path.join(os.getcwd(), 'logs')
+            os.makedirs(file_path, exist_ok=True)
             self.file = open(os.path.join(file_path, name + '.log'), 'w')
         self.allow_debug = False
         self.allow_info = True
