@@ -19,7 +19,7 @@ def main():
 
     all_algos = BaseAlgorithm.get_algorithms()
 
-    logger.debug(f'Algorithms: {", ".join([key for key in all_algos])}')
+    logger.debug(f'Algorithms: {", ".join(all_algos)}')
 
     possible_algos = {key: all_algos[key](OUTPUT_KEY, SUCCESS_KEY, conn) for key in all_algos}
     current_algo = None
