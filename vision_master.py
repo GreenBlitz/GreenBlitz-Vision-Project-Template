@@ -13,11 +13,13 @@ def main():
     logger = GBLogger(LOGGER_NAME)
     logger.allow_debug = BaseAlgorithm.DEBUG
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
-    logger.debug('initialized conn')
+    logger.info('initialized conn')
     camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed
-    logger.debug('initialized camera')
+    logger.info('initialized camera')
 
     all_algos = BaseAlgorithm.get_algorithms()
+
+    logger.debug(f'Algorithms: {", ".join([key for key in all_algos])}')
 
     possible_algos = {key: all_algos[key](OUTPUT_KEY, SUCCESS_KEY, conn) for key in all_algos}
     current_algo = None
