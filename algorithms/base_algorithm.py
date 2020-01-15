@@ -5,6 +5,8 @@ from typing import Union, List, Iterable, Dict, Type
 import gbvision as gbv
 import gbrpi
 
+from utils.gblogger import GBLogger
+
 
 class BaseAlgorithm(abc.ABC):
     __registered = {}
@@ -41,6 +43,8 @@ class BaseAlgorithm(abc.ABC):
         self.success_key = success_key
         self.conn = conn
         self.log_algorithm_incomplete = log_algorithm_incomplete
+        self.logger = GBLogger(self.algorithm_name)
+        self.logger.allow_debug = self.DEBUG
 
     def __call__(self, frame: gbv.Frame, camera: gbv.Camera):
         try:

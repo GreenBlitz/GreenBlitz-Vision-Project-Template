@@ -2,7 +2,7 @@ import gbvision as gbv
 import gbrpi
 
 from algorithms import BaseAlgorithm
-from constants import CAMERA_PORT
+from constants import CAMERA_PORT, TCP_STREAM_PORT
 from constants import TABLE_IP, TABLE_NAME, OUTPUT_KEY, SUCCESS_KEY
 from utils.gblogger import GBLogger
 
@@ -15,6 +15,8 @@ def main():
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
     logger.info('initialized conn')
     camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed
+    camera.set_auto_exposure(False)
+    # camera.rescale(0.5)
     logger.info('initialized camera')
 
     all_algos = BaseAlgorithm.get_algorithms()
@@ -25,8 +27,16 @@ def main():
     current_algo = None
 
     logger.info('starting...')
+
+    if BaseAlgorithm.DEBUG:
+        stream = gbv.TCPStreamBroadcaster(TCP_STREAM_PORT)
+    else:
+        stream = None
+
     while True:
         ok, frame = camera.read()
+        if BaseAlgorithm.DEBUG:
+            stream.send_frame(frame)
         algo_type = conn.get('algorithm')
         if algo_type is not None:
             if algo_type not in possible_algos:
