@@ -1,5 +1,4 @@
 import abc
-import traceback
 from typing import Union, List, Iterable, Dict, Type
 
 import gbvision as gbv
@@ -59,10 +58,10 @@ class BaseAlgorithm(abc.ABC):
                 for i, value in enumerate(values):
                     self.conn.set(self.output_key[i], value)
             self.conn.set(self.success_key, True)
-        except self.AlgorithmIncomplete:
+        except self.AlgorithmIncomplete as e:
             self.conn.set(self.success_key, False)
             if self.log_algorithm_incomplete:
-                traceback.print_exc()
+                self.logger.warning(repr(e))
 
     @abc.abstractmethod
     def _process(self, frame: gbv.Frame, camera: gbv.Camera) -> Union[
