@@ -20,6 +20,10 @@ class BaseAlgorithm(abc.ABC):
     indicates if the program is being run in debug mode
     not in use by the base program, but should be used by algorithms in order to print extra data in debug mode
     """
+    USE_FILE = True
+    """
+    indicates if the loggers should write their output to a file
+    """
 
     class AlgorithmIncomplete(BaseException):
         """
@@ -43,7 +47,7 @@ class BaseAlgorithm(abc.ABC):
         self.success_key = success_key
         self.conn = conn
         self.log_algorithm_incomplete = log_algorithm_incomplete
-        self.logger = GBLogger(self.algorithm_name)
+        self.logger = GBLogger(self.algorithm_name, use_file=self.USE_FILE)
         self.logger.allow_debug = self.DEBUG
 
     def __call__(self, frame: gbv.Frame, camera: gbv.Camera):
