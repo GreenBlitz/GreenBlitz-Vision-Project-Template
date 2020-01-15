@@ -42,6 +42,7 @@ def main():
             if algo_type not in possible_algos:
                 logger.warning(f'Unknown algorithm type: {algo_type}')
             if algo_type != current_algo:
+                logger.debug(f'switched to algorithm: {algo_type}')
                 possible_algos[algo_type].reset(camera)
             algo = possible_algos[algo_type]
             algo(frame, camera)
