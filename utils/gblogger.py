@@ -17,7 +17,7 @@ class GBLogger:
     
     def __log_to_file(self, msg):
         if self.use_file:
-            self.file.write(msg + '\r\n')
+            self.file.write(msg + '\n')
     
     def __print(self, msg):
         print(msg)
