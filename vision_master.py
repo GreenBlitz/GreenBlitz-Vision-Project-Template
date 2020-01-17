@@ -14,7 +14,11 @@ def main():
     logger.allow_debug = BaseAlgorithm.DEBUG
     conn = gbrpi.TableConn(ip=TABLE_IP, table_name=TABLE_NAME)
     logger.info('initialized conn')
-    camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed
+    if BaseAlgorithm.DEBUG:
+        camera = gbv.USBStreamCamera(gbv.TCPStreamBroadcaster(TCP_STREAM_PORT), CAMERA_PORT, data=gbv.LIFECAM_3000)
+        camera.toggle_stream(True)
+    else:
+        camera = gbv.USBCamera(CAMERA_PORT, gbv.LIFECAM_3000)  # rotate the camera here if needed
     camera.set_auto_exposure(False)
     # camera.rescale(0.5)
     logger.info('initialized camera')
@@ -28,15 +32,8 @@ def main():
 
     logger.info('starting...')
 
-    if BaseAlgorithm.DEBUG:
-        stream = gbv.TCPStreamBroadcaster(TCP_STREAM_PORT)
-    else:
-        stream = None
-
     while True:
         ok, frame = camera.read()
-        if BaseAlgorithm.DEBUG:
-            stream.send_frame(frame)
         algo_type = conn.get('algorithm')
         if algo_type is not None:
             if algo_type not in possible_algos:
