@@ -1,5 +1,5 @@
 # all exposure constants go in this file
-from tools.system import is_on_rpi
+from tools import is_on_rpi
 
 __is_on_rpi = is_on_rpi()
 

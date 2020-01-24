@@ -4,7 +4,7 @@ from typing import Union, List, Iterable, Dict, Type
 import gbvision as gbv
 import gbrpi
 
-from utils.gblogger import GBLogger
+from utils import GBLogger
 
 
 class BaseAlgorithm(abc.ABC):

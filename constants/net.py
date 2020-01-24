@@ -1,5 +1,5 @@
 # all net constants go in this file
-from tools.system import is_on_roborio_network
+from tools import is_on_roborio_network
 
 __is_on_roborio_network = is_on_roborio_network()
 
