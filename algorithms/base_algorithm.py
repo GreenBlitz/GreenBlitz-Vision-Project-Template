@@ -1,5 +1,6 @@
 import abc
 from typing import Union, List, Iterable, Dict, Type
+import inspect
 
 import gbvision as gbv
 import gbrpi
@@ -32,6 +33,8 @@ class BaseAlgorithm(abc.ABC):
         """
 
     def __init_subclass__(cls, **kwargs):
+        if inspect.isabstract(cls):
+            return
         if cls.algorithm_name is None:
             raise AttributeError(f'algorithm_name static field value not set for class {cls.__name__}')
         if cls.algorithm_name in BaseAlgorithm.__registered:
